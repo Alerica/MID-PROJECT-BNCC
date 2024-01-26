@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>Create Profile</title>
+  <link rel="shortcut icon" href="https://static.vecteezy.com/system/resources/previews/010/160/674/original/coffee-icon-sign-symbol-design-free-png.png" type="image/png">
+  <link rel='stylesheet' href='https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap'>
+  <link rel='stylesheet' href='https://fonts.googleapis.com/css2?family=Material+Icons+Round'>
+  <!--Update from Ricky-->
+  <link rel="stylesheet" href="main-style.css">
+  <link rel="stylesheet" href="create.css">
+  
+  <!--Update from Ricky-->
+</head>
+<body>
+
+<!-- Navbar -->
+<nav id="navbar">
+  <ul class="navbar-items flexbox-col">
+    <li class="navbar-logo flexbox-left">
+      <a class="navbar-item-inner flexbox">
+        <img src="https://www.freepnglogos.com/uploads/coffee-logo-png/coffee-logo-design-creative-idea-logo-elements-2.png" alt="Coffee Logo">
+      </a>
+    </li>
+    <li class="navbar-item flexbox-left">
+        <a class="navbar-item-inner flexbox-left" id="search-trigger">
+          <div class="navbar-item-inner-icon-wrapper flexbox">
+            <ion-icon name="search-outline"></ion-icon>
+          </div>
+          <span class="link-text">Search</span>
+        </a>
+      </li>
+
+    <li class="navbar-item flexbox-left">
+      <a class="navbar-item-inner flexbox-left" href="dashbord.html">
+        <div class="navbar-item-inner-icon-wrapper flexbox">
+          <ion-icon name="pie-chart-outline"></ion-icon>
+        </div>
+        <span class="link-text">Dashboard</span>
+      </a>
+    </li>
+
+      <li class="navbar-item flexbox-left">
+        <a href="profile.html" class="navbar-item-inner flexbox-left">
+            <div class="navbar-item-inner-icon-wrapper flexbox">
+                <ion-icon name="person-outline"></ion-icon>
+            </div>
+            <span class="link-text">Profile</span>
+        </a>
+    </li>
+  </ul>
+  <!-- Search pop up -->
+  <div id="search-popup" class="search-popup">
+    <button onclick="closeSearchPopup()" aria-label="close" class="x">❌</button>
+    <div class="content">
+      <h2>Hello.</h2>
+      <p>Halo nama saya bambang dan search ini di bawah ini masih tidak bisa</p>
+      <!-- Your search bar or content goes here -->
+      <input type="text" placeholder="Search" class="search-bar">
+    </div>
+    </div>
+
+</nav>
+
+<!-- Main --> <!--Update from Ricky-->
+<main id="main" class="flexbox-col view-width">
+    <h2>Create User</h2>
+    <div class="wrapper">
+        <div class="createcontainer">
+          <form onsubmit="return validateForm()">
+            <div id="uploadedImage"></div>
+            <div class="createform-group">
+                <label for="photo">Photo:</label>
+                <input type="file" id="photo" name="photo" onchange="displayImage(this)">
+            </div>
+            <div class="createform-group">
+                <label for="firstName">First Name:</label>
+                <input type="text" id="firstName" name="firstName" required>
+            </div>
+            <div class="createform-group">
+                <label for="lastName">Last Name:</label>
+                <input type="text" id="lastName" name="lastName" required>
+            </div>
+            <div class="createform-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="createform-group">
+                <label for="bio">Bio:</label>
+                <textarea id="bio" name="bio" rows="4"></textarea>
+            </div>
+            <button class="createbutton" type="submit">Add User</button>
+          </form>
+        </div>
+    </div>
+  </main>
+  <!--Update from Ricky-->
+
+  <!-- Loading screen-->
+  <div id = "loading-screen">
+    <div class="container">
+        <svg version="1.1" x="0px" y="0px" width="501px" height="501px" viewBox="0 0 501 501" style="enable-background:new 0 0 501 501;" xml:space="preserve">
+        <defs>
+        <mask id="liquidMasked">
+        <path fill="#FFF" d="M294.3,377.1c-32.8,9.4-68.2,9.3-101-0.2c-7.1-60.7-14.1-119.7-21.5-175.6c48.3,0,96.5,0,144.8,0 C309,257.2,301.7,316.3,294.3,377.1z"/
+        </mask>
+        </defs>
+        <rect x="0.5" y="0.5" class="bg" width="500" height="500"/>
+        <path class="cup" d="M301.4,382.2c-37.4,10.4-77.9,10.3-115.2-0.3c-8.1-66.7-16.1-131.6-24.5-193c55.1,0,110.1,0,165.2,0
+        C318.1,250.3,309.8,315.3,301.4,382.2z"/>
+        <g id="coffeeMasked" mask="url(#liquidMasked)">
+        <path class="liquid" d="M293.8,376.6c-32.8,9.4-68.2,9.3-101-0.2c-7.1-60.7-14.1-119.7-21.5-175.6c0,0,12-7.1,31.3-0.4
+        c29.8,10.3,32.7-0.2,48.7-0.2c27.4,0,29.2,8.8,44.7,1.3c14.7-7.1,20.2-0.7,20.2-0.7C308.5,256.7,301.2,315.8,293.8,376.6z"/>
+        </g>
+        <g class="steam"> 
+        <path d="M308.5,169c0,0-16.5-17-13-32.5s22-5.5,13.5,6c-7.9,10.6-23.8-6.9-12-21.8c11.5-14.5,10.7-22,10-24.8
+        c-5-18.4-18.6-5.8-12.6-1.1c9.4,7.1,15.2-16.5,13.2-24.5"/>
+        </g>
+        <path class="sleeve" d="M310.2,334.2c-44,5.4-88.4,5.4-132.4,0c-3.2-27.8-6.4-55.7-9.6-83.6c50.4,7.2,101.6,7.2,152,0
+        C316.9,278.4,313.5,306.3,310.2,334.2z"/>
+        <path class="lid" d="M337.2,187v13.8c0,0-15.8,3.7-92,3.7s-92-3.7-92-3.7V187c0-1.8,1.4-3.2,3.2-3.2h5.8v-11.5
+        c0-3.6,2.9-6.5,6.5-6.5h131.8l3.4,2.2c1.1,0.7,2.5,0.7,3.7,0l3.7-2.2h10.9c3.3,0,6.1,2.7,6.1,6.1v11.9h5.8
+        C335.8,183.8,337.2,185.2,337.2,187z"/>
+        </svg>
+        </div>
+  </div>
+<!-- Script for loading screen -->
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+      // Get the loading screen element
+      const loadingScreen = document.getElementById('loading-screen');
+
+      // Get the footer element
+      const footer = document.querySelector('footer');
+
+      // Show loading screen
+      loadingScreen.style.display = 'flex';
+
+      // Hide loading screen after 3 seconds
+      setTimeout(function () {
+          loadingScreen.style.display = 'none';
+          // Show the footer after the loading screen is hidden
+          footer.style.display = 'block';
+      }, 3000);
+  });
+</script>
+<!-- Script for navbar -->
+<script src='https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js'></script>
+<script src='https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js'></script>
+
+<!-- Script for popup -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const searchTrigger = document.getElementById('search-trigger');
+  const searchPopup = document.getElementById('search-popup');
+
+  searchTrigger.addEventListener('click', function () {
+    searchPopup.style.display = 'flex';
+  });
+});
+
+function closeSearchPopup() {
+  const searchPopup = document.getElementById('search-popup');
+  searchPopup.style.display = 'none';
+}
+</script>
+
+<footer style="display: none;">
+    <p>&copy; 2024 Ricky, Stanley, Nico. All rights reserved.</p>
+    <!-- Add social media -->
+  </footer>
+  <script src="create.js"></script>
+</body>
+</html>

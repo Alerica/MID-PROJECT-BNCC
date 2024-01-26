@@ -1,0 +1,93 @@
+
+.profile-container {
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+  max-width: 400px;
+  width: 100%;
+  margin: auto;
+}
+.profile-image {
+  width: 100%;
+  height: auto;
+}
+.info-block {
+  padding: 20px;
+  border-bottom: 1px solid #eee;
+}
+.info-block:last-child {
+  border-bottom: none;
+}
+.info-block label {
+  font-weight: bold;
+}
+.password-container {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+}
+.eye-icon {
+  margin-left: auto;
+  cursor: pointer;
+}
+
+#edit-form {
+  display: none;
+  margin-top: 20px; /* Adjust the margin based on your layout */
+}
+
+#edit-form label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+#edit-form input {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+}
+
+#edit-form button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-right: 5px;
+}
+
+#edit-form button:hover {
+  background-color: #45a049;
+}
+
+#edit-form button:last-child {
+  background-color: #f44336; /* Red color for Cancel button */
+}
+
+#edit-form button:last-child:hover {
+  background-color: #d32f2f; /* Darker red color for Cancel button on hover */
+}
+
+/* Add this to your existing CSS or create a new CSS file */
+
+.edit-button {
+  background-color: #3498db;
+  color: white;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.edit-button:hover {
+  background-color: #2980b9;
+}
+
+label[for="editInput"] {
+  font-weight: bold;
+  margin-left: 10px;
+}
