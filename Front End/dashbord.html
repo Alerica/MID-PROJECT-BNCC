@@ -259,6 +259,7 @@ select {
     transition: width .35s cubic-bezier(var(--transition-main), 1);
     overflow-y: auto;
     overflow-x: hidden;
+    z-index: 1;
 }
 #navbar:hover {
     width: 16em;
@@ -461,10 +462,10 @@ select {
 .search-popup .content {
   padding: 1rem 3rem;
   background: white;
-  max-width: 400px;
+  max-width: 1000px;
   padding-top: 2rem;
   border-radius: 20px;
-  box-shadow: 0 5px 30px 0 rgba(0, 0, 0, 0.1);
+  box-shadow: 0 5px 30px 0 rgba(0, 0, 0, 0.1);  
 }
 
 .search-popup .x {
@@ -476,18 +477,18 @@ select {
   right: 10px;
   transition: ease filter, transform 0.3s;
   cursor: pointer;
-  transform-origin: center;
+  transform-origin: center;  
 }
 
 .search-popup .x:hover {
   filter: grayscale(0);
-  transform: scale(1.1);
+  transform: scale(1.1);  
 }
 
 .search-popup h2 {
   font-weight: 600;
   font-size: 2rem;
-  padding-bottom: 1rem;
+  padding-bottom: 1rem;  
 }
 
 .search-popup p {
@@ -503,7 +504,7 @@ select {
   background-color: hsl(var(--grooble));
   border: 2px solid hsl(var(--grooble));
   outline: none;
-  width: 100%;
+  width: 85%;
   box-sizing: border-box;
 }
 
@@ -512,6 +513,7 @@ select {
     0 0 0 2px hsl(var(--black)),
     0 0 0 3px hsl(var(--white));
   border: 2px solid transparent;
+
 }
 
 
@@ -557,7 +559,7 @@ select {
 .cell {
   padding: 6px 12px;
   display: table-cell;
-  vertical-align: middle; =
+  vertical-align: middle; 
   text-align: center; 
 }
 
@@ -621,6 +623,7 @@ select {
   .button_slide {
     width: 100%;
   }
+
 }
 
 
@@ -669,6 +672,8 @@ select {
   height: 100px; 
   object-fit: cover; 
   display: block;
+  justify-content: center;
+  margin: 0 auto;
 }
 
 /* loading screen */
@@ -682,6 +687,7 @@ select {
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 2;
 }
 
 #loading-screen p {
@@ -768,7 +774,90 @@ footer {
   margin: 0 auto;
 }
 
+/* Add new button */
+.add_button {
+  display: inline-flex;
+  height: 40px;
+  width: 150px;
+  border: 2px solid #ea6153;
+  margin: 20px 20px 20px 20px;
+  text-decoration: none;
+  font-size: .8em;
+  letter-spacing: 1.5px;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: fixed;
+}
 
+.add_button a {
+  color: #ea6153;
+  text-decoration: none;
+  letter-spacing: 1px;
+}
+
+#button-6 {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+#button-6 a {
+  position: relative;
+  transition: all .45s ease-Out;
+}
+
+#spin {
+  width: 0;
+  height: 0;
+  opacity: 0;
+  left: 70px;
+  top: 20px;
+  transform: rotate(0deg);
+  background: none;
+  position: absolute;
+  transition: all .5s ease-Out;
+}
+
+#button-6:hover #spin {
+  width: 200%;
+  height: 500%;
+  opacity: 1;
+  left: -70px;
+  top: -70px;
+  background: #ea6153;
+  transform: rotate(80deg);
+  
+}
+
+#button-6:hover a {
+  color: #ffffff;
+  font-weight: 500;
+  
+}
+
+/* Delete button */
+.confirmation-popup {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+        z-index: 1;
+    }
+
+    .popup-content {
+        background: #fff;
+        padding: 20px;
+        border-radius: 5px;
+        text-align: center;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        
+    }
 
 </style>
 </head>
@@ -790,23 +879,6 @@ footer {
           <span class="link-text">Search</span>
         </a>
       </li>
-    <!--
-      <li class="navbar-item flexbox-left">
-      <a class="navbar-item-inner flexbox-left">
-        <div class="navbar-item-inner-icon-wrapper flexbox">
-          <ion-icon name="home-outline"></ion-icon>
-        </div>
-        <span class="link-text">Home</span>
-      </a>
-    </li>
-    <li class="navbar-item flexbox-left">
-      <a class="navbar-item-inner flexbox-left">
-        <div class="navbar-item-inner-icon-wrapper flexbox">
-          <ion-icon name="folder-open-outline"></ion-icon>
-        </div>
-        <span class="link-text">Projects</span>
-      </a>
-    </li> -->
     <li class="navbar-item flexbox-left">
       <a class="navbar-item-inner flexbox-left" href="dashbord.html">
         <div class="navbar-item-inner-icon-wrapper flexbox">
@@ -815,24 +887,6 @@ footer {
         <span class="link-text">Dashboard</span>
       </a>
     </li>
-    <!--
-    <li class="navbar-item flexbox-left">
-      <a class="navbar-item-inner flexbox-left">
-        <div class="navbar-item-inner-icon-wrapper flexbox">
-          <ion-icon name="people-outline"></ion-icon>
-        </div>
-        <span class="link-text">Team</span>
-      </a>
-    </li>
-    <li class="navbar-item flexbox-left">
-      <a class="navbar-item-inner flexbox-left">
-        <div class="navbar-item-inner-icon-wrapper flexbox">
-          <ion-icon name="chatbubbles-outline"></ion-icon>
-        </div>
-        <span class="link-text">Support</span>
-      </a>
-    </li>
-    -->
       <li class="navbar-item flexbox-left">
         <a href="profile.html" class="navbar-item-inner flexbox-left">
             <div class="navbar-item-inner-icon-wrapper flexbox">
@@ -842,18 +896,18 @@ footer {
         </a>
     </li>
   </ul>
+</nav>
   <!-- Search pop up -->
   <div id="search-popup" class="search-popup">
     <button onclick="closeSearchPopup()" aria-label="close" class="x">❌</button>
     <div class="content">
-      <h2>Hello.</h2>
-      <p>Halo nama saya bambang dan search ini di bawah ini masih tidak bisa</p>
+      <h2>Searching</h2>
+      <p>Search based on full name or email</p>
       <!-- Your search bar or content goes here -->
-      <input type="text" placeholder="Search" class="search-bar">
-    </div>
-    </div>
-
-</nav>
+      <input type="text" placeholder="Search by Full Name or Email" class="search-bar">
+      <div class="button_slide slide_down"  onclick="searchUsers()"><ion-icon name="search-outline"></ion-icon></div>
+  </div>
+</div>
 
 <!-- Main -->
 <main id="main" class="flexbox-col view-width">
@@ -892,15 +946,30 @@ footer {
             bambangcaktelo@gmail.com
             </div>
             <div class="cell" data-title="Action">
-            <a href="#view"><div class = "button_slide slide_down">View</div></a> |
-            <a href="#edit"><div class = "button_slide slide_left">Edit</div></a> |
-            <a href="#delete"><div class = "button_slide slide_right">Delete</div></a>
+            <a href="view_profile.html"><div class = "button_slide slide_down">View</div></a> |
+            <a href="view_profile.html"><div class = "button_slide slide_left">Edit</div></a> |
+            <a href="#delete" onclick="showConfirmationPopup()"><div class = "button_slide slide_right">Delete</div></a>
             </div>
         </div>
+        
       </div>
     </div>
-  </main>
 
+    <!-- Add new user -->
+    <div class="add-user-button-wrapper flexbox-right">
+      <div class="add_button" id = "button-6"><div id ="spin"></div><a href="create_profile.html">Add New User</a></div>
+  </div>
+  </main>
+<!-- Delete button pop up -->
+<div id="confirmationPopup" class="confirmation-popup">
+  <div class="popup-content">
+      <p>Are you sure you want to delete this user?</p>
+      <div class="popup-buttons">
+          <div class = "button_slide slide_down" id = "confirmDelete"onclick="deleteUser()">Yes</div>
+          <div class = "button_slide slide_right" id = "cancelDelete" onclick="deleteUser()">No</div>
+      </div>
+  </div>
+</div>
   <!-- Loading screen-->
   <div id = "loading-screen">
     <div class="container">
@@ -953,7 +1022,24 @@ footer {
 <script src='https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js'></script>
 <script src='https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js'></script>
 
-<!-- Script for popup -->
+<!-- Script for delete popup -->
+<script>
+  function showConfirmationPopup() {
+      document.getElementById("confirmationPopup").style.display = "flex";
+  }
+
+  function closeConfirmationPopup() {
+      document.getElementById("confirmationPopup").style.display = "none";
+  }
+
+  function deleteUser() {
+      // Add your delete logic here
+      // For now, let's just close the popup
+      closeConfirmationPopup();
+  }
+</script>
+
+<!-- Script for search popup -->
 <script>
 document.addEventListener('DOMContentLoaded', function () {
   const searchTrigger = document.getElementById('search-trigger');
