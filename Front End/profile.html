@@ -558,7 +558,7 @@ select {
 .cell {
   padding: 6px 12px;
   display: table-cell;
-  vertical-align: middle; =
+  vertical-align: middle; 
   text-align: center; 
 }
 
@@ -864,7 +864,17 @@ footer {
     </div>
 
     <!-- Log Out button -->
-    <div class = "button_slide slide_down">Log Out</div>
+    <div class = "button_slide slide_down" onclick="openLogoutPopup()">Log Out</div>
+    <!-- Logout popup -->
+    <div id="logoutPopup" class="search-popup">
+      <button onclick="closeLogoutPopup()" aria-label="close" class="x">❌</button>
+      <div class="content">
+        <h2>Logout Confirmation</h2>
+        <p>Are you sure you want to logout?</p>
+        <!-- Add any additional content or buttons as needed -->
+        <div class = "button_slide slide_down" id = "logout"onclick="deleteUser()">Logout</div>
+      </div>
+    </div>
 </main>
 
   <!-- Loading screen-->
@@ -915,11 +925,29 @@ footer {
         }, 3000);
     });
 </script>
+
+<!-- Script for logout popup-->
+<script>
+function openLogoutPopup() {
+  const logoutPopup = document.getElementById('logoutPopup');
+  logoutPopup.style.display = 'flex';
+}
+
+function closeLogoutPopup() {
+  const logoutPopup = document.getElementById('logoutPopup');
+  logoutPopup.style.display = 'none';
+}
+
+function logout() {
+  // Implement your logout logic here
+  alert('Logout logic goes here'); // Replace this with your actual logout logic
+}
+</script>
 <!-- Script for navbar -->
 <script src='https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js'></script>
 <script src='https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js'></script>
 
-<!-- Script for popup -->
+<!-- Script for search popup -->
 <script>
 document.addEventListener('DOMContentLoaded', function () {
   const searchTrigger = document.getElementById('search-trigger');
