@@ -765,7 +765,7 @@ footer {
   border: 2px solid hsl(202, 92%, 59%);
   background-color: hsl(202, 92%, 59%);
   border-radius: 0px;
-  padding: 5px 6px;
+  padding: 7px 6px;
   display: inline-block;
   font-size: 14px;
   letter-spacing: 1px;
@@ -824,10 +824,24 @@ footer {
     <button onclick="closeSearchPopup()" aria-label="close" class="x">❌</button>
     <div class="content">
       <h2>Searching</h2>
-      <p>Search based on full name or email</p>
+      <p>Search based on first name, last name, or email</p>
       <!-- Your search bar or content goes here -->
-      <input type="text" placeholder="Search by Full Name or Email" class="search-bar">
-      <div class="button_slide2 slide_down2"  onclick="searchUsers()"><ion-icon name="search-outline"></ion-icon></div>
+      <?php
+        // Initialize variables for search
+        $searchTerm = "";
+
+        if (isset($_GET['search'])) {
+            $searchTerm = $_GET['search'];
+        }
+        ?>
+        
+      <form method="GET" action=""id="search-form">
+        <input type="text" name="search" class="search-bar" placeholder="Search by first name, last name, or email" value="<?php echo $searchTerm; ?>">
+        <div class="button_slide2 slide_down2" onclick="document.getElementById('search-form').submit()">
+        <ion-icon name="search-outline"></ion-icon>
+        </div>
+      <input type="hidden" name="submit_search" value="1">
+     </form>
   </div>
 </div>
 
@@ -844,49 +858,57 @@ footer {
             </div>
             <!-- Fetch from database -->
             <?php
-            $hostname = "localhost";
-            $username = "admin";
-            $password = "admin123";
-            $database = "attendance_system";
+                $hostname = "localhost";
+                $username = "admin";
+                $password = "admin123";
+                $database = "attendance_system";
 
-            // Create connection
-            $connection = new mysqli($hostname, $username, $password, $database);
+                // Create connection
+                $connection = new mysqli($hostname, $username, $password, $database);
 
-            // Check connection
-            if ($connection->connect_error) {
-                die("Connection failed: " . $connection->connect_error);
-            }
+                // Check connection
+                if ($connection->connect_error) {
+                    die("Connection failed: " . $connection->connect_error);
+                }
 
-            // Fetch all admins from the database
-            $sql = "SELECT * FROM `admin`";
-            $result = $connection->query($sql);
+                // Initialize variables for search
+                $searchTerm = "";
+                if (isset($_GET['search'])) {
+                    $searchTerm = $_GET['search'];
+                }
 
-            // Check if the query was successful
-            if ($result) {
-                // Check if there are rows in the result set
-                if ($result->num_rows > 0) {
-                    // Loop through the result set and display admin information
-                    while ($adminData = $result->fetch_assoc()) {
-                        ?>
-                        <div class="row">
-                            <div class="cell"><?php echo $adminData['firstName']; ?></div>
-                            <div class="cell"><?php echo $adminData['lastName']; ?></div>
-                            <div class="cell"><?php echo $adminData['email']; ?></div>
-                            <div class="cell"><?php echo $adminData['bio']; ?></div>
-                        </div>
-                        <?php
+                // Fetch admins from the database based on search term
+                $sql = "SELECT * FROM `admin` 
+                        WHERE `firstName` LIKE '%$searchTerm%' OR `lastName` LIKE '%$searchTerm%' OR `email` LIKE '%$searchTerm%'";
+                $result = $connection->query($sql);
+
+                // Check if the query was successful
+                if ($result) {
+                    // Check if there are rows in the result set
+                    if ($result->num_rows > 0) {
+                        // Loop through the result set and display admin information
+                        while ($adminData = $result->fetch_assoc()) {
+                            ?>
+                            <div class="row">
+                                <div class="cell"><?php echo $adminData['firstName']; ?></div>
+                                <div class="cell"><?php echo $adminData['lastName']; ?></div>
+                                <div class="cell"><?php echo $adminData['email']; ?></div>
+                                <div class="cell"><?php echo $adminData['bio']; ?></div>
+                            </div>
+                            <?php
+                        }
+                    } else {
+                        // Handle the case when there are no matching admins in the database
+                        echo "No matching admins found.";
                     }
                 } else {
-                    // Handle the case when there are no admins in the database
-                    echo "No admins found.";
+                    // Handle the case when the query fails
+                    echo "Error: " . $sql . "<br>" . $connection->error;
                 }
-            } else {
-                // Handle the case when the query fails
-                echo "Error: " . $sql . "<br>" . $connection->error;
-            }
-            // Close the database connection
-            $connection->close();
-            ?>
+
+                // Close the database connection
+                $connection->close();
+                ?>
         </div>
     </div>
 
@@ -989,6 +1011,9 @@ document.addEventListener('DOMContentLoaded', function () {
 function closeSearchPopup() {
   const searchPopup = document.getElementById('search-popup');
   searchPopup.style.display = 'none';
+}
+function submitSearchForm() {
+        document.getElementById('search-form').submit();
 }
 </script>
 
