@@ -557,17 +557,20 @@ form .login-link a:hover{
     <div class="signupcontainer">
         <div class="wrapper">
             <div class="title"><span>Sign Up</span></div>
-            <form action="#">
-	    <div class="row">
-                <input type="text" placeholder="Username" required>
+            <form method="post" action="signup.php">
+            <div class="row">
+                <input type="text" placeholder="First Name" name="firstName" id="firstName" required>
             </div>
             <div class="row">
-                <input type="text" placeholder="Email" required>
+                <input type="text" placeholder="Last Name" name="lastName" id="lastName" required>
             </div>
             <div class="row">
-                <input type="password" placeholder="Password" required>
+                <input type="text" placeholder="Email" name="email" id="email" required>
             </div>
-            <div class="login-link">Already a member? <a href="#">Login</a></div>
+            <div class="row">
+                <input type="password" placeholder="Password" name="password" id="password" required>
+            </div>
+            <div class="login-link">Already a member? <a href="login.html">Login</a></div>
             <div class="row button">
                 <input type="submit" value="Create Account">
             </div>
