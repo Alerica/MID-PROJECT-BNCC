@@ -936,7 +936,7 @@ footer {
             $hostname = "localhost";
             $username = "admin";
             $password = "admin123";
-            $database = "user";
+            $database = "attendance_system";
 
             // Create connection
             $connection = new mysqli($hostname, $username, $password, $database);
@@ -946,7 +946,7 @@ footer {
                 die("Connection failed: " . $connection->connect_error);
             }
 
-            // Fetch all admins from the database
+            // Fetch all users from the database
             $sql = "SELECT * FROM `users`";
             $result = $connection->query($sql);
 
@@ -980,7 +980,7 @@ footer {
                             <div class="cell" data-title="Action">
                                 <a href="view_profile.html"><div class="button_slide slide_down">View</div></a> |
                                 <a href="view_profile.html"><div class="button_slide slide_left">Edit</div></a> |
-                                <a href="#delete" onclick="showConfirmationPopup()"><div class="button_slide slide_right">Delete</div></a>
+                                <a href="#" onclick="showConfirmationPopup()"><div class="button_slide slide_right">Delete</div></a>
                             </div>
                         </div>
                         <?php
