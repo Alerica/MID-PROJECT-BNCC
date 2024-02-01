@@ -15,42 +15,33 @@ if (isset($_POST['email']) && isset($_POST['password'])) {
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = validate($_POST['email']);
     $password = validate($_POST['password']);
-    if (empty($email)) {
-        echo "Email is required";
-        exit();
-    }else if(empty($password)){
-        echo "Password is required";
-        exit();
-    }else{
-        $sql = "SELECT * FROM `admin` WHERE email='$email' AND password='$password'";
-        $result = $db->query($sql);
-        if (mysqli_num_rows($result) === 1) {
-            $row = mysqli_fetch_assoc($result);
-            if ($row['email'] === $email && $row['password'] === $password) {
-                if(!empty($_POST["remember"])) {
-                    setcookie ("email",$_POST["email"],time()+ (10 * 365 * 24 * 60 * 60));
-                    setcookie ("password",$_POST["password"],time()+ (10 * 365 * 24 * 60 * 60));
-                    } else {
-                        if(isset($_COOKIE["email"])) {
-                            setcookie ("email","");
-                        }
-                        if(isset($_COOKIE["password"])) {
-                            setcookie ("password","");
-                        }
+    $sql = "SELECT * FROM `admin` WHERE email='$email' AND password='$password'";
+    $result = $db->query($sql);
+    if (mysqli_num_rows($result) === 1) {
+        $row = mysqli_fetch_assoc($result);
+        if ($row['email'] === $email && $row['password'] === $password) {
+            if(!empty($_POST["remember"])) {
+                setcookie ("email",$_POST["email"],time()+ (10 * 365 * 24 * 60 * 60));
+                setcookie ("password",$_POST["password"],time()+ (10 * 365 * 24 * 60 * 60));
+                } else {
+                    if(isset($_COOKIE["email"])) {
+                        setcookie ("email","");
                     }
-                header("Location: dashbord.php");
-                exit();
-            } else {
-                echo "Incorrect Email or Password";
-                exit();
-            }
+                    if(isset($_COOKIE["password"])) {
+                        setcookie ("password","");
+                    }
+                }
+            header("Location: dashbord.php");
+            exit();
         } else {
-            echo "Incorrect Email or password";
+            echo "Incorrect Email or Password";
             exit();
         }
+    } else {
+        echo "Incorrect Email or password";
+        exit();
     }
 }
-
 $db->close();
 ?>
 
