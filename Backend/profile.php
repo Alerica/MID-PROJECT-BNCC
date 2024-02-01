@@ -847,7 +847,7 @@ footer {
             $hostname = "localhost";
             $username = "admin";
             $password = "admin123";
-            $database = "admin";
+            $database = "attendance_system";
 
             // Create connection
             $connection = new mysqli($hostname, $username, $password, $database);
