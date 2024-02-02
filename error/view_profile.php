@@ -929,45 +929,46 @@ label[for="editInput"] {
                 die("Connection failed: " . $connection->connect_error);
             }
 
-            $sql = "SELECT * FROM `admin`";
+            $targetUserId = 1; 
+
+            $sql = "SELECT * FROM `users` WHERE `id` = $targetUserId";
             $result = $connection->query($sql);
+
             if ($result) {
                 if ($result->num_rows > 0) {
-                    while ($adminData = $result->fetch_assoc()) {
-                        ?>
-                        <div class="info-block">
-                            <label for="firstName">First Name:</label>
-                            <p id="firstName"><?php echo $adminData['firstName']; ?></p>
-                            <button class="edit-button" onclick="editInfo('firstName')">Edit</button>
-                        </div>
+                    $adminData = $result->fetch_assoc();
+                    ?>
+                    <div class="info-block">
+                        <label for="firstName">First Name:</label>
+                        <p id="firstName"><?php echo $adminData['firstName']; ?></p>
+                        <button class="edit-button" onclick="editInfo('firstName')">Edit</button>
+                    </div>
 
-                        <div class="info-block">
-                            <label for="lastName">Last Name:</label>
-                            <p id="lastName"><?php echo $adminData['lastName']; ?></p>
-                            <button class="edit-button" onclick="editInfo('lastName')">Edit</button>
-                        </div>
+                    <div class="info-block">
+                        <label for="lastName">Last Name:</label>
+                        <p id="lastName"><?php echo $adminData['lastName']; ?></p>
+                        <button class="edit-button" onclick="editInfo('lastName')">Edit</button>
+                    </div>
 
-                        <div class="info-block">
-                            <label for="email">Email:</label>
-                            <p id="email"><?php echo $adminData['email']; ?></p>
-                            <button class="edit-button" onclick="editInfo('email')">Edit</button>
-                        </div>
+                    <div class="info-block">
+                        <label for="email">Email:</label>
+                        <p id="email"><?php echo $adminData['email']; ?></p>
+                        <button class="edit-button" onclick="editInfo('email')">Edit</button>
+                    </div>
 
-                        <div class="info-block">
-                            <label for="bio">Bio:</label>
-                            <p id="bio"><?php echo $adminData['bio']; ?></p>
-                            <button class="edit-button" onclick="editInfo('bio')">Edit</button>
-                        </div>
-                        <div class="password-container">
-                            <label for="password">Password:</label>
-                            <p id="password" style="margin: 0; visibility: hidden;"><?php echo $adminData['password']; ?></p>
-                            <span class="eye-icon" onclick="togglePasswordVisibility()">👁️</span>
-                        </div>
-                        <?php
-                    }
+                    <div class="info-block">
+                        <label for="bio">Bio:</label>
+                        <p id="bio"><?php echo $adminData['bio']; ?></p>
+                        <button class="edit-button" onclick="editInfo('bio')">Edit</button>
+                    </div>
+                    <div class="password-container">
+                        <label for="password">Password:</label>
+                        <p id="password" style="margin: 0; visibility: hidden;"><?php echo $adminData['password']; ?></p>
+                        <span class="eye-icon" onclick="togglePasswordVisibility()">👁️</span>
+                    </div>
+                    <?php
                 } else {
-
-                    echo "No admins found.";
+                    echo "No admin found with ID $targetUserId.";
                 }
             } else {
                 echo "Error: " . $sql . "<br>" . $connection->error;
