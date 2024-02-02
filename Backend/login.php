@@ -17,29 +17,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = validate($_POST['password']);
     $sql = "SELECT * FROM `admin` WHERE email='$email' AND password='$password'";
     $result = $db->query($sql);
+
     if (mysqli_num_rows($result) === 1) {
         $row = mysqli_fetch_assoc($result);
         if ($row['email'] === $email && $row['password'] === $password) {
             if(!empty($_POST["remember"])) {
-                setcookie ("email",$_POST["email"],time()+ (10 * 365 * 24 * 60 * 60));
-                setcookie ("password",$_POST["password"],time()+ (10 * 365 * 24 * 60 * 60));
-                } else {
-                    if(isset($_COOKIE["email"])) {
-                        setcookie ("email","");
-                    }
-                    if(isset($_COOKIE["password"])) {
-                        setcookie ("password","");
-                    }
+                setcookie("email", $_POST["email"], time() + (10 * 365 * 24 * 60 * 60));
+                setcookie("password", $_POST["password"], time() + (10 * 365 * 24 * 60 * 60));
+            } else {
+                if(isset($_COOKIE["email"])) {
+                    setcookie("email", "");
                 }
+                if(isset($_COOKIE["password"])) {
+                    setcookie("password", "");
+                }
+            }
             header("Location: dashbord.php");
             exit();
         } else {
-            echo "Incorrect Email or Password";
-            exit();
+            echo "<script>alert('Incorrect Email or Password');</script>";
         }
     } else {
-        echo "Incorrect Email or password";
-        exit();
+        echo "<script>alert('Incorrect Email or Password');</script>";
     }
 }
 $db->close();
@@ -587,6 +586,7 @@ form .button input:hover{
   text-align: center;
   margin-top: 20px;
   font-size: 17px;
+  margin-bottom: 10px;
 }
 .wrapper form .rememberme a{
   color: #ea6153;
@@ -595,6 +595,21 @@ form .button input:hover{
 form .rememberme a:hover{
   text-decoration: underline;
 }
+
+.custom-button {
+    background-color: #4CAF50; 
+    color: white; 
+    padding: 10px 20px; 
+    border: none; 
+    border-radius: 5px; 
+    cursor: pointer;
+}
+
+
+.custom-button:hover {
+    background-color: #45a049; 
+}
+
 </style>
 </head>
 
@@ -616,7 +631,7 @@ form .rememberme a:hover{
                 <input type="checkbox" name="remember" id="remember" checked <?php if(isset($_COOKIE["email"])) { ?> checked <?php } ?> />
             </div>
             <div class="row button">
-                <input type="submit" value="Login" name="loginBtn">
+                <input type="submit" value="Login" name="loginBtn"  class="custom-button">
             </div>
             </form>
         </div>
