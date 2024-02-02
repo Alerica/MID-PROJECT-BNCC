@@ -921,7 +921,10 @@ footer {
         <h2>Logout Confirmation</h2>
         <p>Are you sure you want to logout?</p>
         <!-- Add any additional content or buttons as needed -->
-        <div class = "button_slide slide_down" id = "logout"onclick="deleteUser()">Logout</div>
+        <form method="POST" action="logout.php" id="logout-form">
+        <div class="button_slide slide_down" onclick="document.getElementById('logout-form').submit()">Logout</div>
+        </form>
+        <!-- Logout -->
       </div>
     </div>
 </main>
@@ -977,20 +980,31 @@ footer {
 
 <!-- Script for logout popup-->
 <script>
-function openLogoutPopup() {
-  const logoutPopup = document.getElementById('logoutPopup');
-  logoutPopup.style.display = 'flex';
-}
+    function openLogoutPopup() {
+        const logoutPopup = document.getElementById('logoutPopup');
+        logoutPopup.style.display = 'flex';
+    }
 
-function closeLogoutPopup() {
-  const logoutPopup = document.getElementById('logoutPopup');
-  logoutPopup.style.display = 'none';
-}
+    function closeLogoutPopup() {
+        const logoutPopup = document.getElementById('logoutPopup');
+        logoutPopup.style.display = 'none';
+    }
 
-function logout() {
-  // Implement your logout logic here
-  alert('Logout logic goes here'); // Replace this with your actual logout logic
-}
+    function logout() {
+        // Use AJAX to send a request to the server for logout
+        const xhr = new XMLHttpRequest();
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                // Handle the response, e.g., redirect to login page
+                window.location.href = 'login.php';
+            }
+        };
+
+        xhr.open('POST', 'profile.php', true);
+        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        xhr.send('logout=true');
+    }
 </script>
 
 <!-- Script for navbar -->
