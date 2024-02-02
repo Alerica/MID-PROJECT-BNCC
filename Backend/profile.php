@@ -920,11 +920,10 @@ footer {
       <div class="content">
         <h2>Logout Confirmation</h2>
         <p>Are you sure you want to logout?</p>
-        <!-- Add any additional content or buttons as needed -->
+        <!-- Logout -->
         <form method="POST" action="logout.php" id="logout-form">
         <div class="button_slide slide_down" onclick="document.getElementById('logout-form').submit()">Logout</div>
         </form>
-        <!-- Logout -->
       </div>
     </div>
 </main>
