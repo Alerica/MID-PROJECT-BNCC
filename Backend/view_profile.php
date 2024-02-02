@@ -1147,35 +1147,7 @@ function saveEdit() {
 
     // Hide the edit form
     document.getElementById('edit-form').style.display = 'none';
-
-    // Get the targetUserId from the URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const targetUserId = urlParams.get('targetUserId');
-
-    const formData = new FormData();
-    formData.append('userId', targetUserId);
-    formData.append('field', editingField);
-    formData.append('value', editInput.value);
-
-    fetch('update_profile.php', {
-        method: 'POST',
-        body: formData,
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`Network response was not ok: ${response.statusText}`);
-        }
-        return response.json();
-    })
-    .then(data => {
-        // Handle the response from the server if needed
-        console.log(data);
-    })
-    .catch(error => {
-        console.error('Error:', error);
-    });
 }
-
 
 function cancelEdit() {
     // Hide the edit form
