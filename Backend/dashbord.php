@@ -780,7 +780,7 @@ footer {
   height: 40px;
   width: 150px;
   border: 2px solid #ea6153;
-  margin: 20px 20px 20px 20px;
+  margin: 20px auto 60px auto; /* Adjust margin-bottom to create space above the footer */
   text-decoration: none;
   font-size: .8em;
   letter-spacing: 1.5px;
@@ -788,6 +788,9 @@ footer {
   justify-content: center;
   overflow: hidden;
   position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .add_button a {
@@ -827,14 +830,13 @@ footer {
   top: -70px;
   background: #ea6153;
   transform: rotate(80deg);
-  
 }
 
 #button-6:hover a {
   color: #ffffff;
   font-weight: 500;
-  
 }
+
 
 /* Delete button */
 .confirmation-popup {
@@ -947,79 +949,82 @@ footer {
         </div>
         <!-- Fetch from database -->
         <?php
-            $hostname = "localhost";
-            $username = "admin";
-            $password = "admin123";
-            $database = "attendance_system";
+          $hostname = "localhost";
+          $username = "admin";
+          $password = "admin123";
+          $database = "attendance_system";
 
-            // Create connection
-            $connection = new mysqli($hostname, $username, $password, $database);
+          // Create connection
+          $connection = new mysqli($hostname, $username, $password, $database);
 
-            // Check connection
-            if ($connection->connect_error) {
-                die("Connection failed: " . $connection->connect_error);
-            }
+          // Check connection
+          if ($connection->connect_error) {
+              die("Connection failed: " . $connection->connect_error);
+          }
 
-            // Initialize variables for search
-            $searchTerm = "";
-            if (isset($_GET['search'])) {
-                $searchTerm = $_GET['search'];
-            }
+          // Initialize search term
+          $searchTerm = isset($_GET['search']) ? $_GET['search'] : "";
 
-            // Fetch all users from the database based on search term
-            $sql = "SELECT * FROM `users` 
-                    WHERE `firstName` LIKE '%$searchTerm%' OR `lastName` LIKE '%$searchTerm%' OR `email` LIKE '%$searchTerm%'";
-            $result = $connection->query($sql);
+          // Fetch users from the database based on search term
+          $sql = "SELECT * FROM `users` 
+                  WHERE `firstName` LIKE '%$searchTerm%' OR `lastName` LIKE '%$searchTerm%' OR `email` LIKE '%$searchTerm'";
+          $result = $connection->query($sql);
 
-            // Check if the query was successful
-            if ($result) {
-                // Check if there are rows in the result set
-                if ($result->num_rows > 0) {
-                    // Initialize user number counter
-                    $userNumber = 1;
+          // Check if the query was successful
+          if ($result) {
+              // Check if there are rows in the result set
+              if ($result->num_rows > 0) {
+                  // Initialize user number counter
+                  $userNumber = 1;
 
-                    // Loop through the result set and display user information
-                    while ($userData = $result->fetch_assoc()) {
-                        ?>
-                        <div class="row">
-                            <div class="cell" data-title="Number">
-                                <?php echo $userNumber; ?>
-                            </div>
-                            <div class="cell">
-                                <?php
-                                // Check if the 'Photo' column is not empty
-                                if (!empty($userData['Photo'])) {
-                                    $base64Image = base64_encode($userData['Photo']);
-                                    echo "<img src='data:image/jpeg;base64, $base64Image' alt='User Photo'>";
-                                } else {
-                                    echo "No photo available";
-                                }
-                                ?>
-                            </div>
-                            <div class="cell"><?php echo $userData['firstName'] . ' ' . $userData['lastName']; ?></div>
-                            <div class="cell"><?php echo $userData['email']; ?></div>
-                            <div class="cell" data-title="Action">
-                                <a href="view_profile.html"><div class="button_slide slide_down">View</div></a> |
-                                <a href="view_profile.html"><div class="button_slide slide_left">Edit</div></a> |
-                                <a href="#" onclick="showConfirmationPopup()"><div class="button_slide slide_right">Delete</div></a>
-                            </div>
-                        </div>
-                        <?php
-                        // Increment user number for the next iteration
-                        $userNumber++;
-                    }
-                } else {
-                    // Handle the case when there are no matching users in the database
-                    echo "No matching users found.";
-                }
-            } else {
-                // Handle the case when the query fails
-                echo "Error: " . $sql . "<br>" . $connection->error;
-            }
+                  // Loop through the result set and display user information
+                  while ($userData = $result->fetch_assoc()) {
+                      // Retrieve the Id column value
+                      $targetUserId = $userData['Id'];
 
-            // Close the database connection
-            $connection->close();
-            ?>
+                      // Display user information
+                      ?>
+                      <div class="row">
+                          <div class="cell" data-title="Number"><?php echo $userNumber; ?></div>
+                          <div class="cell">
+                              <?php
+                              // Check if the 'Photo' column is not empty
+                              if (!empty($userData['Photo'])) {
+                                  $base64Image = base64_encode($userData['Photo']);
+                                  echo "<img src='data:image/jpeg;base64, $base64Image' alt='User Photo'>";
+                              } else {
+                                  echo "No photo available";
+                              }
+                              ?>
+                          </div>
+                          <div class="cell"><?php echo $userData['firstName'] . ' ' . $userData['lastName']; ?></div>
+                          <div class="cell"><?php echo $userData['email']; ?></div>
+                          <div class="cell" data-title="Action">
+                              <a href="view_profile.php?targetUserId=<?php echo $targetUserId; ?>">
+                                  <div class="button_slide slide_down">View</div>
+                              </a> |
+                              <a href="view_profile.php?targetUserId=<?php echo $targetUserId; ?>">
+                                  <div class="button_slide slide_left">Edit</div>
+                              </a> |
+                              <a href="#" onclick="showConfirmationPopup('<?php echo $targetUserId; ?>')">
+                                  <div class="button_slide slide_right">Delete</div>
+                              </a>
+                          </div>
+                      </div>
+                      <?php
+                      $userNumber++;
+                  }
+              } else {
+                  
+                  echo "No matching users found.";
+              }
+          } else {
+              echo "Error: " . $sql . "<br>" . $connection->error;
+          }
+
+          $connection->close();
+          ?>
+
       </div>
     </div>
 
