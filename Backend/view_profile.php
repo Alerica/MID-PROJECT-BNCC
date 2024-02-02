@@ -996,8 +996,6 @@ label[for="editInput"] {
             }
             ?>
 
-
-
             <div id="edit-form" style="display: none;">
                 <label for="editInput">Edit:</label>
                 <input type="text" id="editInput">
