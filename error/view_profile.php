@@ -963,12 +963,12 @@ label[for="editInput"] {
                     </div>
                     <div class="password-container">
                         <label for="password">Password:</label>
-                        <p id="password" style="margin: 0; visibility: hidden;"><?php echo $adminData['password']; ?></p>
+                        <p id="password" style="margin: 0; visibility: hidden;"><?php echo $adminData['Password']; ?></p>
                         <span class="eye-icon" onclick="togglePasswordVisibility()">👁️</span>
                     </div>
                     <?php
                 } else {
-                    echo "No admin found with ID $targetUserId.";
+                    echo "No userss found with ID $targetUserId.";
                 }
             } else {
                 echo "Error: " . $sql . "<br>" . $connection->error;
@@ -976,14 +976,16 @@ label[for="editInput"] {
             $connection->close();
             ?>
 
-            
             <div id="edit-form" style="display: none;">
                 <label for="editInput">Edit:</label>
                 <input type="text" id="editInput">
                 <button onclick="saveEdit()">Save</button>
                 <button onclick="cancelEdit()">Cancel</button>
             </div>
+            
         </div>
+
+        
     </div>
     <div></div>
 </main>
