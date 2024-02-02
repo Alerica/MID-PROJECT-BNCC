@@ -752,6 +752,7 @@ footer {
   -webkit-transition: ease-out 0.4s;
   -moz-transition: ease-out 0.4s;
   transition: ease-out 0.4s;
+  margin: 20px auto 60px auto; /* Adjust margin-bottom to create space above the footer */
 }
 
 .slide_down:hover {
@@ -833,8 +834,7 @@ footer {
         if (isset($_GET['search'])) {
             $searchTerm = $_GET['search'];
         }
-        ?>
-        
+      ?>  
       <form method="GET" action=""id="search-form">
         <input type="text" name="search" class="search-bar" placeholder="Search by first name, last name, or email" value="<?php echo $searchTerm; ?>">
         <div class="button_slide2 slide_down2" onclick="document.getElementById('search-form').submit()">
@@ -989,21 +989,6 @@ footer {
         logoutPopup.style.display = 'none';
     }
 
-    function logout() {
-        // Use AJAX to send a request to the server for logout
-        const xhr = new XMLHttpRequest();
-
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                // Handle the response, e.g., redirect to login page
-                window.location.href = 'login.php';
-            }
-        };
-
-        xhr.open('POST', 'profile.php', true);
-        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-        xhr.send('logout=true');
-    }
 </script>
 
 <!-- Script for navbar -->
