@@ -931,54 +931,72 @@ label[for="editInput"] {
                 if ($connection->connect_error) {
                     die("Connection failed: " . $connection->connect_error);
                 }
+                // Fetch the actual ID from the database based on the targetUserId
+                $idQuery = "SELECT `id` FROM `users` WHERE `Id` = $targetUserId";
+                $idResult = $connection->query($idQuery);
 
-                $sql = "SELECT * FROM `users` WHERE `id` = $targetUserId";
-                $result = $connection->query($sql);
+                if ($idResult) {
+                    if ($idResult->num_rows > 0) {
+                        $row = $idResult->fetch_assoc();
+                        $actualUserId = $row['id'];
 
-                if ($result) {
-                    if ($result->num_rows > 0) {
-                        $adminData = $result->fetch_assoc();
-                        ?>
-                        <div class="info-block">
-                            <label for="firstName">First Name:</label>
-                            <p id="firstName"><?php echo $adminData['firstName']; ?></p>
-                            <button class="edit-button" onclick="editInfo('firstName')">Edit</button>
-                        </div>
+                        // Use the actualUserId in the subsequent queries
+                        $sql = "SELECT * FROM `users` WHERE `id` = $actualUserId";
+                        $result = $connection->query($sql);
 
-                        <div class="info-block">
-                            <label for="lastName">Last Name:</label>
-                            <p id="lastName"><?php echo $adminData['lastName']; ?></p>
-                            <button class="edit-button" onclick="editInfo('lastName')">Edit</button>
-                        </div>
+                        if ($result) {
+                            if ($result->num_rows > 0) {
+                                $adminData = $result->fetch_assoc();
+                                ?>
+                                <div class="info-block">
+                                    <label for="firstName">First Name:</label>
+                                    <p id="firstName"><?php echo $adminData['firstName']; ?></p>
+                                    <button class="edit-button" onclick="editInfo('firstName')">Edit</button>
+                                </div>
+                                <div class="info-block">
+                                    <label for="lastName">Last Name:</label>
+                                    <p id="lastName"><?php echo $adminData['lastName']; ?></p>
+                                    <button class="edit-button" onclick="editInfo('lastName')">Edit</button>
+                                </div>
 
-                        <div class="info-block">
-                            <label for="email">Email:</label>
-                            <p id="email"><?php echo $adminData['email']; ?></p>
-                            <button class="edit-button" onclick="editInfo('email')">Edit</button>
-                        </div>
+                                <div class="info-block">
+                                    <label for="email">Email:</label>
+                                    <p id="email"><?php echo $adminData['email']; ?></p>
+                                    <button class="edit-button" onclick="editInfo('email')">Edit</button>
+                                </div>
 
-                        <div class="info-block">
-                            <label for="bio">Bio:</label>
-                            <p id="bio"><?php echo $adminData['bio']; ?></p>
-                            <button class="edit-button" onclick="editInfo('bio')">Edit</button>
-                        </div>
-                        <div class="password-container">
-                            <label for="password">Password:</label>
-                            <p id="password" style="margin: 0; visibility: hidden;"><?php echo $adminData['Password']; ?></p>
-                            <span class="eye-icon" onclick="togglePasswordVisibility()">👁️</span>
-                        </div>
-                        <?php
+                                <div class="info-block">
+                                    <label for="bio">Bio:</label>
+                                    <p id="bio"><?php echo $adminData['bio']; ?></p>
+                                    <button class="edit-button" onclick="editInfo('bio')">Edit</button>
+                                </div>
+
+                                <div class="password-container">
+                                    <label for="password">Password:</label>
+                                    <p id="password" style="margin: 0; visibility: hidden;"><?php echo $adminData['Password']; ?></p>
+                                    <span class="eye-icon" onclick="togglePasswordVisibility()">👁️</span>
+                                </div>
+                                <?php
+                            } else {
+                                echo "No user found with ID $actualUserId.";
+                            }
+                        } else {
+                            echo "Error: " . $sql . "<br>" . $connection->error;
+                        }
                     } else {
-                        echo "No user found with ID $targetUserId.";
+                        echo "No user found with targetUserId $targetUserId.";
                     }
                 } else {
-                    echo "Error: " . $sql . "<br>" . $connection->error;
+                    echo "Error: " . $idQuery . "<br>" . $connection->error;
                 }
+
                 $connection->close();
             } else {
                 echo "No targetUserId specified in the URL.";
             }
             ?>
+
+
 
             <div id="edit-form" style="display: none;">
                 <label for="editInput">Edit:</label>
