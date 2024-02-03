@@ -443,77 +443,6 @@ select {
 
 }
 
-/* Search popup */
-
-.search-popup {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(255, 255, 255, 0.4);
-  display: none;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
-.search-popup .content {
-  padding: 1rem 3rem;
-  background: white;
-  max-width: 400px;
-  padding-top: 2rem;
-  border-radius: 20px;
-  box-shadow: 0 5px 30px 0 rgba(0, 0, 0, 0.1);
-}
-
-.search-popup .x {
-  filter: grayscale(1);
-  border: none;
-  background: none;
-  position: absolute;
-  top: 15px;
-  right: 10px;
-  transition: ease filter, transform 0.3s;
-  cursor: pointer;
-  transform-origin: center;
-}
-
-.search-popup .x:hover {
-  filter: grayscale(0);
-  transform: scale(1.1);
-}
-
-.search-popup h2 {
-  font-weight: 600;
-  font-size: 2rem;
-  padding-bottom: 1rem;
-}
-
-.search-popup p {
-  font-size: 1rem;
-  line-height: 1.3rem;
-  padding: 0.5rem 0;
-}
-
-/* Search bar */
-.search-popup .search-bar {
-  padding: 0.5em;
-  font-size: 1rem;
-  background-color: hsl(var(--grooble));
-  border: 2px solid hsl(var(--grooble));
-  outline: none;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.search-popup .search-bar:focus {
-  box-shadow:
-    0 0 0 2px hsl(var(--black)),
-    0 0 0 3px hsl(var(--white));
-  border: 2px solid transparent;
-}
-
 
 /* Table styles */
 
@@ -874,16 +803,7 @@ label[for="editInput"] {
       </a>
     </li>
     <li class="navbar-item flexbox-left">
-        <a class="navbar-item-inner flexbox-left" id="search-trigger">
-          <div class="navbar-item-inner-icon-wrapper flexbox">
-            <ion-icon name="search-outline"></ion-icon>
-          </div>
-          <span class="link-text">Search</span>
-        </a>
-      </li>
-
-    <li class="navbar-item flexbox-left">
-      <a class="navbar-item-inner flexbox-left" href="dashbord.html">
+      <a class="navbar-item-inner flexbox-left" href="dashbord.php">
         <div class="navbar-item-inner-icon-wrapper flexbox">
           <ion-icon name="pie-chart-outline"></ion-icon>
         </div>
@@ -892,7 +812,7 @@ label[for="editInput"] {
     </li>
 
       <li class="navbar-item flexbox-left">
-        <a href="profile.html" class="navbar-item-inner flexbox-left">
+        <a href="profile.php" class="navbar-item-inner flexbox-left">
             <div class="navbar-item-inner-icon-wrapper flexbox">
                 <ion-icon name="person-outline"></ion-icon>
             </div>
@@ -900,16 +820,6 @@ label[for="editInput"] {
         </a>
     </li>
   </ul>
-  <!-- Search pop up -->
-  <div id="search-popup" class="search-popup">
-    <button onclick="closeSearchPopup()" aria-label="close" class="x">❌</button>
-    <div class="content">
-      <h2>Hello.</h2>
-      <p>Halo nama saya bambang dan search ini di bawah ini masih tidak bisa</p>
-      <!-- Your search bar or content goes here -->
-      <input type="text" placeholder="Search" class="search-bar">
-    </div>
-    </div>
 
 </nav>
 
@@ -1085,7 +995,7 @@ label[for="editInput"] {
   </footer>
 
 
-<script>
+  <script>
 document.addEventListener('DOMContentLoaded', function () {
   // Check if the $userData variable is defined
   if (typeof $userData !== 'undefined') {
@@ -1142,7 +1052,6 @@ function getUserId() {
     return userId;
 }
 
-
 function saveEdit() {
     const editInput = document.getElementById('editInput').value.trim();
     const valueElement = document.getElementById(editingField);
@@ -1163,40 +1072,88 @@ function saveEdit() {
         return;
     }
 
-    // Update the value in the profile
-    valueElement.innerText = editInput;
+    // Check for duplicate email
+    if (editingField === 'email') {
+        // Fetch the existing emails from the server
+        fetch('fetch_emails.php')
+            .then(response => response.json())
+            .then(data => {
+                const existingEmails = data.emails;
 
-    // Hide the edit form
-    document.getElementById('edit-form').style.display = 'none';
+                // Check for duplicate email, excluding the current valueElement
+                const duplicateEmail = existingEmails.find(email => email.trim().toLowerCase() === editInput.toLowerCase() && email !== valueElement.innerText.trim().toLowerCase());
 
-    // Send the updated data to the server
-    fetch('update_profile.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: `userId=${userId}&field=${editingField}&value=${editInput}`,
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.status === 'success') {
-            console.log('Profile updated successfully');
-        } else {
-            console.error('Error updating profile:', data.message);
-        }
-    })
-    .catch(error => {
-        console.error('Fetch error:', error);
-    });
+                if (duplicateEmail) {
+                    alert("Duplicate email found. Please use a different email address.");
+                    return;
+                } else {
+                    // Update the value in the profile
+                    valueElement.innerText = editInput;
+
+                    // Hide the edit form
+                    document.getElementById('edit-form').style.display = 'none';
+
+                    // Send the updated data to the server
+                    fetch('update_profile.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: `userId=${userId}&field=${editingField}&value=${editInput}`,
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            console.log('Profile updated successfully');
+                        } else {
+                            console.error('Error updating profile:', data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Fetch error:', error);
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Fetch error:', error);
+            });
+    } else {
+        // For non-email fields, directly update the value in the profile
+
+        // Update the value in the profile
+        valueElement.innerText = editInput;
+
+        // Hide the edit form
+        document.getElementById('edit-form').style.display = 'none';
+
+        // Send the updated data to the server
+        fetch('update_profile.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `userId=${userId}&field=${editingField}&value=${editInput}`,
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                console.log('Profile updated successfully');
+            } else {
+                console.error('Error updating profile:', data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Fetch error:', error);
+        });
+    }
 }
-
-
-
 
 function cancelEdit() {
     // Hide the edit form
     document.getElementById('edit-form').style.display = 'none';
 }
+
+
 </script>
 </body>
 </html>
