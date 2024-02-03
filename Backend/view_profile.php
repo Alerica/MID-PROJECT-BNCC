@@ -856,6 +856,7 @@ footer {
   background-color: #2980b9;
 }
 
+
 label[for="editInput"] {
   font-weight: bold;
   margin-left: 10px;
@@ -949,6 +950,21 @@ label[for="editInput"] {
                             if ($result->num_rows > 0) {
                                 $adminData = $result->fetch_assoc();
                                 ?>
+                                <div class="photo-container" style="display: flex; justify-content: center; align-items: center; height: 100%;">
+                                    <label for="photo"></label>
+                                    <?php
+                                    if (!empty($adminData['Photo'])) {
+                                        $imageData = $adminData['Photo'];
+                                        $base64Image = 'data:image/jpeg;base64,' . base64_encode($imageData);
+                                        echo "<img src='$base64Image' alt='User Photo' style='max-width: 50%; max-height: 50%;'>";
+                                    } else {
+                                        echo "No photo available";
+                                    }
+                                    ?>
+                                </div>
+
+
+
                                 <div class="info-block">
                                     <label for="firstName">First Name:</label>
                                     <p id="firstName"><?php echo $adminData['firstName']; ?></p>
@@ -1081,30 +1097,6 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 });
 
-async function fetchUserProfile() {
-  try {
-      const response = await fetch('fetch_user_profile.php');
-      
-      if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-
-      const data = await response.json();
-
-      // Update HTML elements with fetched data
-      document.getElementById('firstName').innerText = data.firstName;
-      document.getElementById('lastName').innerText = data.lastName;
-      document.getElementById('email').innerText = data.email;
-      document.getElementById('bio').innerText = data.bio;
-  } catch (error) {
-      console.error('Error fetching user profile:', error);
-  }
-}
-
-// Call the fetchUserProfile function when the page loads
-document.addEventListener('DOMContentLoaded', function () {
-  fetchUserProfile();
-});
 
 
 
@@ -1137,16 +1129,69 @@ function editInfo(field) {
     editForm.style.display = 'block';
 }
 
+function getUserId() {
+    // Get the current URL
+    const currentUrl = window.location.href;
+
+    // Use URLSearchParams to extract query parameters
+    const urlParams = new URLSearchParams(new URL(currentUrl).search);
+
+    // Get the value of the 'targetUserId' parameter
+    const userId = urlParams.get('targetUserId');
+
+    return userId;
+}
+
+
 function saveEdit() {
-    const editInput = document.getElementById('editInput');
+    const editInput = document.getElementById('editInput').value.trim();
     const valueElement = document.getElementById(editingField);
+    const userId = getUserId();
+
+    // Email validation regex
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    // Check if the field is email and the editInput is a valid email
+    if (editingField === 'email' && !emailRegex.test(editInput)) {
+        alert("Please enter a valid email address.");
+        return;
+    }
+
+    // Check if the editInput is empty
+    if (!editInput) {
+        alert("Please enter a value before saving.");
+        return;
+    }
 
     // Update the value in the profile
-    valueElement.innerText = editInput.value;
+    valueElement.innerText = editInput;
 
     // Hide the edit form
     document.getElementById('edit-form').style.display = 'none';
+
+    // Send the updated data to the server
+    fetch('update_profile.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `userId=${userId}&field=${editingField}&value=${editInput}`,
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            console.log('Profile updated successfully');
+        } else {
+            console.error('Error updating profile:', data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Fetch error:', error);
+    });
 }
+
+
+
 
 function cancelEdit() {
     // Hide the edit form
