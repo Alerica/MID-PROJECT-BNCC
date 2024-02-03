@@ -940,7 +940,7 @@ $connection->close();
       </li>
 
     <li class="navbar-item flexbox-left">
-      <a class="navbar-item-inner flexbox-left" href="dashbord.html">
+      <a class="navbar-item-inner flexbox-left" href="dashbord.php">
         <div class="navbar-item-inner-icon-wrapper flexbox">
           <ion-icon name="pie-chart-outline"></ion-icon>
         </div>
@@ -949,7 +949,7 @@ $connection->close();
     </li>
 
       <li class="navbar-item flexbox-left">
-        <a href="profile.html" class="navbar-item-inner flexbox-left">
+        <a href="profile.php" class="navbar-item-inner flexbox-left">
             <div class="navbar-item-inner-icon-wrapper flexbox">
                 <ion-icon name="person-outline"></ion-icon>
             </div>
@@ -978,8 +978,8 @@ $connection->close();
           <form onsubmit="return validateForm()" action="add_user.php" method="post" enctype="multipart/form-data">
               <div id="uploadedImage"></div>
               <div class="createform-group">
-                  <label for="photo">Photo:</label>
-                  <input type="file" id="photo" name="photo" onchange="displayImage(this)">
+                <label for="photo">Photo (Max 64KB):</label>
+                <input type="file" id="photo" name="photo" onchange="displayImage(this);">
               </div>
               <div class="createform-group">
                   <label for="firstName">First Name:</label>
@@ -1079,17 +1079,17 @@ function closeSearchPopup() {
   </footer>
   <script>
     // create.js
-function displayImage(input) {
+    function displayImage(input) {
     var uploadedImage = document.getElementById('uploadedImage');
     uploadedImage.innerHTML = ''; // Clear previous content
 
     var img = document.createElement('img');
-    img.src = 'https://wallpaperset.com/w/full/c/8/a/224233.jpg'; // Set the path to your default image
+    img.src = 'default_64.jpeg'; // Set the path to your default image
     img.style.width = '100%';
     img.style.height = 'auto';
     uploadedImage.appendChild(img);
 
-    if (input.files && input.files[0]) {
+    if (input.files && input.files[0] && validatePhotoSize(input)) {
         var reader = new FileReader();
 
         reader.onload = function(e) {
@@ -1104,6 +1104,19 @@ function displayImage(input) {
 document.addEventListener('DOMContentLoaded', function() {
     displayImage({ files: [] });
 });
+
+function validatePhotoSize(input) {
+      const maxFileSizeKB = 64;
+      if (input.files.length > 0) {
+        const fileSizeKB = input.files[0].size / 1024; // Convert bytes to KB
+        if (fileSizeKB > maxFileSizeKB) {
+          alert("Error: Photo size must be at most 64KB.");
+          input.value = ''; // Clear the input field
+        } else {
+            return true;
+        }
+      }
+    }
 
 function validateForm() {
     // Get form elements
