@@ -831,8 +831,8 @@ input, textarea {
 }
 
 #uploadedImage {
-    width: 200px; /* Adjust the size as needed */
-    height: 200px; /* Adjust the size as needed */
+    width: 50%; /* Adjust the size as needed */
+    height: 50%; /* Adjust the size as needed */
     margin-bottom: 1px;
     border: none;
 }
