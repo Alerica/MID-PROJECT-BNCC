@@ -1030,7 +1030,7 @@ footer {
 
     <!-- Add new user -->
     <div class="add-user-button-wrapper flexbox-right">
-      <div class="add_button" id = "button-6"><div id ="spin"></div><a href="create_profile.html">Add New User</a></div>
+      <div class="add_button" id = "button-6"><div id ="spin"></div><a href="create_profile.php">Add New User</a></div>
   </div>
   </main>
 <!-- Delete button pop up -->
