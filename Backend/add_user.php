@@ -1,7 +1,7 @@
 <?php
 $hostname = "localhost";
-$username = "admin";
-$password = "admin123";
+$username = "root";
+$password = "";
 $database = "attendance_system";
 
 $connection = new mysqli($hostname, $username, $password, $database);
@@ -13,11 +13,14 @@ if ($connection->connect_error) {
 // Handle form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Get form data
-    $photo = $_FILES["photo"]["name"];
     $firstName = $_POST["firstName"];
     $lastName = $_POST["lastName"];
     $email = $_POST["email"];
     $bio = $_POST["bio"];
+
+    // Upload photo
+    $photo = $_FILES["photo"]["tmp_name"];
+    $photoContent = file_get_contents($photo);
 
     // Query the database to find the maximum existing user ID
     $result = $connection->query("SELECT MAX(CAST(SUBSTRING(Id, 2) AS SIGNED)) AS maxId FROM users");
@@ -44,19 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Insert data into the 'users' table
     $sql = "INSERT INTO `users` (Id, Photo, firstName, lastName, email, hashedPassword, Password, bio) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
     $stmt = $connection->prepare($sql);
-    $stmt->bind_param("ssssssss", $nextId, $photo, $firstName, $lastName, $email, $hashedPassword, $randomPassword, $bio);
-
-    // Upload photo
-    $targetDir = "uploads/";
-
-    // Check if the 'uploads' directory exists, if not, create it
-    if (!file_exists($targetDir) && !is_dir($targetDir)) {
-        mkdir($targetDir, 0755, true);
-    }
-
-    // Move the uploaded file
-    $targetFile = $targetDir . basename($_FILES["photo"]["name"]);
-    move_uploaded_file($_FILES["photo"]["tmp_name"], $targetFile);
+    $stmt->bind_param("ssssssss", $nextId, $photoContent, $firstName, $lastName, $email, $hashedPassword, $randomPassword, $bio);
 
     if ($stmt->execute()) {
         $response = array(
