@@ -67,6 +67,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             "generatedPassword" => $randomPassword,
             "userId" => $nextId
         );
+        echo '<script>
+            alert("User added successfully!");
+            setTimeout(function() {
+                window.location.href = "dashbord.php";
+            }, 1000);
+          </script>';
+          exit();
     } else {
         $response = array("status" => "error", "message" => "Error: " . $connection->error);
     }
