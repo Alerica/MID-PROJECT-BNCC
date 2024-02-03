@@ -932,8 +932,9 @@ label[for="editInput"] {
                     die("Connection failed: " . $connection->connect_error);
                 }
                 // Fetch the actual ID from the database based on the targetUserId
-                $idQuery = "SELECT `id` FROM `users` WHERE `Id` = $targetUserId";
+                $idQuery = "SELECT `id` FROM `users` WHERE `Id` = '$targetUserId'";
                 $idResult = $connection->query($idQuery);
+                
 
                 if ($idResult) {
                     if ($idResult->num_rows > 0) {
@@ -941,7 +942,7 @@ label[for="editInput"] {
                         $actualUserId = $row['id'];
 
                         // Use the actualUserId in the subsequent queries
-                        $sql = "SELECT * FROM `users` WHERE `id` = $actualUserId";
+                        $sql = "SELECT * FROM `users` WHERE `Id` = '$actualUserId'";
                         $result = $connection->query($sql);
 
                         if ($result) {
