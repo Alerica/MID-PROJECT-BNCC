@@ -1,5 +1,4 @@
 <?php
-// create_profile extension
 $hostname = "localhost";
 $username = "admin";
 $password = "admin123";
@@ -7,7 +6,6 @@ $database = "attendance_system";
 
 $connection = new mysqli($hostname, $username, $password, $database);
 
-// Check connection
 if ($connection->connect_error) {
     die("Connection failed: " . $connection->connect_error);
 }
@@ -22,12 +20,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $bio = $_POST["bio"];
 
     // Query the database to find the maximum existing user ID
-    $result = $connection->query("SELECT MAX(CAST(Id AS SIGNED)) AS maxId FROM users");
+    $result = $connection->query("SELECT MAX(CAST(SUBSTRING(Id, 2) AS SIGNED)) AS maxId FROM users");
     $row = $result->fetch_assoc();
     $maxId = $row['maxId'];
 
     // Increment the maximum user ID
-    $nextId = $maxId + 1;
+    $nextId = 'U' . str_pad($maxId + 1, 3, '0', STR_PAD_LEFT);
 
     // Generate password
     function generateRandomPassword($length = 8) {
@@ -43,7 +41,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Hash the password 
     $hashedPassword = md5($randomPassword);
 
-    //insert data into the 'users' table
+    // Insert data into the 'users' table
     $sql = "INSERT INTO `users` (Id, Photo, firstName, lastName, email, hashedPassword, Password, bio) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
     $stmt = $connection->prepare($sql);
     $stmt->bind_param("ssssssss", $nextId, $photo, $firstName, $lastName, $email, $hashedPassword, $randomPassword, $bio);
