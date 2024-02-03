@@ -1,7 +1,7 @@
 <?php
 $hostname = "localhost";
-$username = "admin";
-$password = "admin123";
+$username = "root";
+$password = "";
 $database = "attendance_system";
 
 $connection = new mysqli($hostname, $username, $password, $database);
@@ -17,6 +17,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $userId = $_POST["userId"];
     $field = $_POST["field"];
     $value = $_POST["value"];
+
+    // Check for duplicate email
+    if ($field == "email") {
+        $checkDuplicateQuery = "SELECT * FROM `users` WHERE `email` = ?";
+        $stmtDuplicate = $connection->prepare($checkDuplicateQuery);
+        $stmtDuplicate->bind_param("s", $value);
+        $stmtDuplicate->execute();
+        $result = $stmtDuplicate->get_result();
+
+        if ($result->num_rows > 0) {
+            $stmtDuplicate->close();
+            $connection->close();
+            echo '<script>
+                    alert("Error: Email already exists");
+                </script>';
+            exit;
+        }
+
+        $stmtDuplicate->close();
+    }
 
     // Update the user profile 
     $updateQuery = "UPDATE `users` SET $field = ? WHERE `id` = ?";
