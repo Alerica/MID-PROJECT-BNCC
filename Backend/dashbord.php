@@ -1114,6 +1114,7 @@ footer {
           // Additional logic to delete the user using currentTargetUserId
           alert('Deleting user with ID: ' + currentTargetUserId);
           // You can make an AJAX request to delete the user on the server side
+          window.location.href = 'delete_profile.php?targetUserId=' + currentTargetUserId;
       } else {
           alert('Error: Unable to retrieve user ID');
       }
