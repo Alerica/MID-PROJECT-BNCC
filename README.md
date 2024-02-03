@@ -48,7 +48,7 @@ Ricky :
   - Adjust photo size
   - Adjust view profile and create profile
 - View profile :
-  
+  - Edit data validation
 - Create Profile :
   - Add feature upload photo
   - Add photo validation (max 64kb)
