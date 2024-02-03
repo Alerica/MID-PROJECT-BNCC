@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -444,78 +443,6 @@ select {
 
 }
 
-/* Search popup */
-
-.search-popup {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(255, 255, 255, 0.4);
-  display: none;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
-.search-popup .content {
-  padding: 1rem 3rem;
-  background: white;
-  max-width: 400px;
-  padding-top: 2rem;
-  border-radius: 20px;
-  box-shadow: 0 5px 30px 0 rgba(0, 0, 0, 0.1);
-}
-
-.search-popup .x {
-  filter: grayscale(1);
-  border: none;
-  background: none;
-  position: absolute;
-  top: 15px;
-  right: 10px;
-  transition: ease filter, transform 0.3s;
-  cursor: pointer;
-  transform-origin: center;
-}
-
-.search-popup .x:hover {
-  filter: grayscale(0);
-  transform: scale(1.1);
-}
-
-.search-popup h2 {
-  font-weight: 600;
-  font-size: 2rem;
-  padding-bottom: 1rem;
-}
-
-.search-popup p {
-  font-size: 1rem;
-  line-height: 1.3rem;
-  padding: 0.5rem 0;
-}
-
-/* Search bar */
-.search-popup .search-bar {
-  padding: 0.5em;
-  font-size: 1rem;
-  background-color: hsl(var(--grooble));
-  border: 2px solid hsl(var(--grooble));
-  outline: none;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.search-popup .search-bar:focus {
-  box-shadow:
-    0 0 0 2px hsl(var(--black)),
-    0 0 0 3px hsl(var(--white));
-  border: 2px solid transparent;
-}
-
-
 /* Table styles */
 
 .wrapper {
@@ -839,89 +766,6 @@ input, textarea {
 </style>
 </head>
 <body>
-    
-<?php
-$response = array();
-
-// create_profile extension
-$hostname = "localhost";
-$username = "admin";
-$password = "admin123";
-$database = "attendance_system";
-
-$connection = new mysqli($hostname, $username, $password, $database);
-
-// Check connection
-if ($connection->connect_error) {
-    die("Connection failed: " . $connection->connect_error);
-}
-
-// Handle form submission
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Get form data
-    $photo = $_FILES["photo"]["name"];
-    $firstName = $_POST["firstName"];
-    $lastName = $_POST["lastName"];
-    $email = $_POST["email"];
-    $bio = $_POST["bio"];
-
-    // Query the database to find the maximum existing user ID
-    $result = $connection->query("SELECT MAX(CAST(Id AS SIGNED)) AS maxId FROM users");
-    $row = $result->fetch_assoc();
-    $maxId = $row['maxId'];
-
-    // Increment the maximum user ID
-    $nextId = $maxId + 1;
-
-    // Generate password
-    function generateRandomPassword($length = 8) {
-        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $password = '';
-        for ($i = 0; $i < $length; $i++) {
-            $password .= $characters[rand(0, strlen($characters) - 1)];
-        }
-        return $password;
-    }
-    $randomPassword = generateRandomPassword();
-
-    // Hash the password 
-    $hashedPassword = md5($randomPassword);
-
-    //insert data into the 'users' table
-    $sql = "INSERT INTO `users` (Id, Photo, firstName, lastName, email, hashedPassword, Password, bio) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-    $stmt = $connection->prepare($sql);
-    $stmt->bind_param("ssssssss", $nextId, $photo, $firstName, $lastName, $email, $hashedPassword, $randomPassword, $bio);
-
-    // Upload photo
-    $targetDir = "uploads/";
-
-    // Check if the 'uploads' directory exists, if not, create it
-    if (!file_exists($targetDir) && !is_dir($targetDir)) {
-        mkdir($targetDir, 0755, true);
-    }
-
-    // Move the uploaded file
-    $targetFile = $targetDir . basename($_FILES["photo"]["name"]);
-    move_uploaded_file($_FILES["photo"]["tmp_name"], $targetFile);
-
-    if ($stmt->execute()) {
-        $response = array(
-            "status" => "success",
-            "message" => "User added successfully",
-            "generatedPassword" => $randomPassword,
-            "userId" => $nextId
-        );
-    } else {
-        $response = array("status" => "error", "message" => "Error: " . $connection->error);
-    }
-
-    $stmt->close();
-}
-
-$connection->close();
-
-?>
-
 <!-- Navbar -->
 <nav id="navbar">
   <ul class="navbar-items flexbox-col">
@@ -930,15 +774,6 @@ $connection->close();
         <img src="https://www.freepnglogos.com/uploads/coffee-logo-png/coffee-logo-design-creative-idea-logo-elements-2.png" alt="Coffee Logo">
       </a>
     </li>
-    <li class="navbar-item flexbox-left">
-        <a class="navbar-item-inner flexbox-left" id="search-trigger">
-          <div class="navbar-item-inner-icon-wrapper flexbox">
-            <ion-icon name="search-outline"></ion-icon>
-          </div>
-          <span class="link-text">Search</span>
-        </a>
-      </li>
-
     <li class="navbar-item flexbox-left">
       <a class="navbar-item-inner flexbox-left" href="dashbord.php">
         <div class="navbar-item-inner-icon-wrapper flexbox">
@@ -957,16 +792,6 @@ $connection->close();
         </a>
     </li>
   </ul>
-  <!-- Search pop up -->
-  <div id="search-popup" class="search-popup">
-    <button onclick="closeSearchPopup()" aria-label="close" class="x">❌</button>
-    <div class="content">
-      <h2>Hello.</h2>
-      <p>Halo nama saya bambang dan search ini di bawah ini masih tidak bisa</p>
-      <!-- Your search bar or content goes here -->
-      <input type="text" placeholder="Search" class="search-bar">
-    </div>
-    </div>
 
 </nav>
 
@@ -1056,22 +881,6 @@ $connection->close();
 <script src='https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js'></script>
 <script src='https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js'></script>
 
-<!-- Script for popup -->
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-  const searchTrigger = document.getElementById('search-trigger');
-  const searchPopup = document.getElementById('search-popup');
-
-  searchTrigger.addEventListener('click', function () {
-    searchPopup.style.display = 'flex';
-  });
-});
-
-function closeSearchPopup() {
-  const searchPopup = document.getElementById('search-popup');
-  searchPopup.style.display = 'none';
-}
-</script>
 
 <footer style="display: none;">
     <p>&copy; 2024 Ricky, Stanley, Nico. All rights reserved.</p>
@@ -1084,7 +893,7 @@ function closeSearchPopup() {
     uploadedImage.innerHTML = ''; // Clear previous content
 
     var img = document.createElement('img');
-    img.src = 'default_64.jpeg'; // Set the path to your default image
+    img.src = 'https://img.freepik.com/premium-photo/festive-colorful-background-with-sparkles-bokeh-ai_958332-509.jpg?size=626&ext=jpg&ga=GA1.1.1803636316.1701302400&semt=ais'; // Set the path to your default image
     img.style.width = '100%';
     img.style.height = 'auto';
     uploadedImage.appendChild(img);
