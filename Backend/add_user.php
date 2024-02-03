@@ -18,6 +18,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST["email"];
     $bio = $_POST["bio"];
 
+    // Check if the email already exists in the database
+    $checkEmailQuery = "SELECT COUNT(*) as count FROM users WHERE email = ?";
+    $checkStmt = $connection->prepare($checkEmailQuery);
+    $checkStmt->bind_param("s", $email);
+    $checkStmt->execute();
+    $checkResult = $checkStmt->get_result();
+    $emailCount = $checkResult->fetch_assoc()['count'];
+
+    if ($emailCount > 0) {
+        $response = array("status" => "error", "message" => "Email already exists in the database");
+        echo '<script>
+            alert("Error: Email already exists in the database");
+            setTimeout(function() {
+                window.location.href = "create_profile.php";
+            }, 1000);
+          </script>';
+        exit();
+    }
+
     // Upload photo
     $photo = $_FILES["photo"]["tmp_name"];
     $photoContent = file_get_contents($photo);
@@ -68,6 +87,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     $stmt->close();
+    $checkStmt->close();
 }
 
 $connection->close();
