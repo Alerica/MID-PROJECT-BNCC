@@ -904,7 +904,7 @@ footer {
     <button onclick="closeSearchPopup()" aria-label="close" class="x">❌</button>
     <div class="content">
       <h2>Searching</h2>
-      <p>Search based on first name, last name, or email</p>
+      <p>Search based on full name or email</p>
       <!-- Your search bar or content goes here -->
       <?php
         // Initialize variables for search
@@ -916,7 +916,7 @@ footer {
         ?>
         
       <form method="GET" action=""id="search-form">
-        <input type="text" name="search" class="search-bar" placeholder="Search by first name, last name, or email" value="<?php echo $searchTerm; ?>">
+        <input type="text" name="search" class="search-bar" placeholder="Search by full name or email" value="<?php echo $searchTerm; ?>">
         <div class="button_slide slide_down" onclick="document.getElementById('search-form').submit()">
         <ion-icon name="search-outline"></ion-icon>
         </div>
