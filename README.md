@@ -16,7 +16,7 @@ Anggota :
 Stanley:
 - CSS : 
   - Create most of the CSS
-- Dashboard : 
+- Dashboard
 - Profile (Admin)
 - Logout
 - Other :
