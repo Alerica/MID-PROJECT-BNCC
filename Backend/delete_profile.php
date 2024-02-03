@@ -18,10 +18,18 @@ if(isset($_GET['targetUserId'])) {
 
     // Construct the DELETE query
     $sql = "DELETE FROM users WHERE Id = '$targetUserId'";
+    
 
     // Execute the DELETE query
     if ($connection->query($sql) === TRUE) {
         echo "User profile with ID $targetUserId deleted successfully";
+        echo '<script>
+            alert("User deleted successfully!");
+            setTimeout(function() {
+                window.location.href = "dashbord.php";
+            }, 1000);
+          </script>';
+          exit();
     } else {
         echo "Error deleting profile: " . $connection->error;
     }
