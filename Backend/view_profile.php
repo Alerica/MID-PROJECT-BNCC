@@ -829,8 +829,8 @@ label[for="editInput"] {
         <div class="profile-container">
         <?php
             $hostname = "localhost";
-            $username = "admin";
-            $password = "admin123";
+            $username = "root";
+            $password = "";
             $database = "attendance_system";
 
             // Check if targetUserId is present in the URL
