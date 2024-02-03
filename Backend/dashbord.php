@@ -1039,7 +1039,7 @@ footer {
       <p>Are you sure you want to delete this user?</p>
       <div class="popup-buttons">
           <div class = "button_slide slide_down" id = "confirmDelete"onclick="deleteUser()">Yes</div>
-          <div class = "button_slide slide_right" id = "cancelDelete" onclick="deleteUser()">No</div>
+          <div class = "button_slide slide_right" id = "cancelDelete" onclick="closeConfirmationPopup()">No</div>
       </div>
   </div>
 </div>
@@ -1096,9 +1096,13 @@ footer {
 <script src='https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js'></script>
 
 <!-- Script for delete popup -->
+<!-- Update -->
 <script>
-  function showConfirmationPopup() {
+  var currentTargetUserId; // Variable to store the targetUserId
+
+  function showConfirmationPopup(targetUserId) {
       document.getElementById("confirmationPopup").style.display = "flex";
+      currentTargetUserId = targetUserId;
   }
 
   function closeConfirmationPopup() {
@@ -1106,11 +1110,17 @@ footer {
   }
 
   function deleteUser() {
-      // Add your delete logic here
-      // For now, let's just close the popup
+      if (currentTargetUserId !== undefined) {
+          // Additional logic to delete the user using currentTargetUserId
+          alert('Deleting user with ID: ' + currentTargetUserId);
+          // You can make an AJAX request to delete the user on the server side
+      } else {
+          alert('Error: Unable to retrieve user ID');
+      }
       closeConfirmationPopup();
   }
 </script>
+
 
 <!-- Script for search popup -->
 <script>
